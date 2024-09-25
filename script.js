@@ -1,36 +1,52 @@
-(function(){
-  "use strict"
+let detailsForm = document.querySelector('#destination_details_form');
+let destinations_container = document.querySelector('#destinations_container');
+let removeBtn = destinations_container.querySelector('button');
+removeBtn.addEventListener("click", removeDestination);
+
+detailsForm.addEventListener('submit', event =>{
+  event.preventDefault();
+  const name = detailsForm.querySelector('#name').value;
+  const location = detailsForm.querySelector('#location').value;
+  const photo = detailsForm.querySelector('#photo').value;
+  const description = detailsForm.querySelector('#description').value;
+
+  let card = document.createElement("div");
+  card.className='card';
+
+  let img = document.createElement('img');
+  img.setAttribute('src',photo);
+  card.appendChild(img);
+
+  let cardBody = document.createElement("div");
+  cardBody.className = "card-body";
+  
+  let cardTitle = document.createElement("h3");
+  cardTitle.innerText = name;
+  cardBody.appendChild(cardTitle);
+
+  let cardSubtitle = document.createElement("h4");
+  cardSubtitle.innerText = location;
+  cardBody.appendChild(cardSubtitle);
+
+  let cardText = document.createElement("p");
+  cardText.className = "card-text";
+  cardText.innerText=description;
+  cardBody.appendChild(cardText);
+
+  let cardDeleteBtn = document.createElement("button");
+  cardDeleteBtn.innerText = "Remove";
+  cardDeleteBtn.addEventListener("click", removeDestination);
+  cardBody.appendChild(cardDeleteBtn);
+
+  destinations_container.appendChild(card);
+  card.appendChild(cardBody);
 
 
-  const form = document.getElementById('convert');
-  let titleMessage = document.querySelector('h1');
-  let mileToKilo = true;
-  const converter = 1.60934;
-  const checkIfNumber = /^[-]?([1-9]\d*|0)(\.\d+)?$/;
-  window.addEventListener("keydown", function(e){
-    if(e.key==='k' || e.key==='K'){
-      titleMessage.innerHTML='Kilometers to Miles Converter';
-      mileToKilo = false;
-    }else if(e.key==='m' || e.key==='M'){
-      titleMessage.innerHTML='Miles to Kilometers Converter';
-      mileToKilo = true;
-    }
-  });
-  form.addEventListener('submit', function(event) {
-    event.preventDefault();
-    const element = document.querySelector('#answer').querySelector('h2'); 
-    const distance = document.getElementById('distance').value;
-    element.classList.remove('invisible');
 
-    if(checkIfNumber.test(distance)){
-      if(mileToKilo)element.innerHTML = `${distance} miles converts to ${Math.round(distance * converter * 10000)/10000} kilometers`;
-      else element.innerHTML = `${distance} kilometers converts to ${Math.round(10000* distance / converter)/10000} miles`;
-    }else{
-      element.innerHTML = "(Error) Please input the correct Number";
-    }
-      
-    
-  });
+});
 
 
-})();
+function removeDestination(event){
+  var card = event.target.parentElement.parentElement;
+  card.remove();
+}
